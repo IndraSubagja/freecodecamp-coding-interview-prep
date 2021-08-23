@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../public/style.css" />
+    <title>Image Search Abstraction Layer</title>
+  </head>
+  <body>
+    <h1 class="title">Image Search Abstraction Layer</h1>
+
+    <form>
+      <div>
+        <label for="type">Search Type</label>
+        <select name="type" id="type">
+          <option value="recent">See Recent Searches</option>
+          <option value="query">Search for Images</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="query">Query</label>
+        <input type="text" name="query" id="query" disabled />
+      </div>
+
+      <div>
+        <label for="page">Page</label>
+        <input type="number" name="page" id="page" min="1" max="10" value="1" disabled />
+      </div>
+
+      <div>
+        <label for="size">Size</label>
+        <select name="size" id="size" disabled>
+          <option value="all">All</option>
+          <option value="icon">Icon</option>
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+          <option value="xlarge">XLarge</option>
+          <option value="xxlarge">XXLarge</option>
+          <option value="huge">Huge</option>
+        </select>
+      </div>
+    </form>
+
+    <p class="output">URL: <a href=""></a></p>
+
+    <script src="../public/index.js"></script>
+  </body>
+</html>
