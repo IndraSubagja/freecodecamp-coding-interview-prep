@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Books to Take - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <div class="container">
+      <h1>Select Books to Take</h1>
+
+      <div class="book-list"></div>
+
+      <a href="/requests/new" class="btn">Continue</a>
+    </div>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        getBooks('There are currently no books to exchange', false, true);
+      });
+    </script>
+  </body>
+</html>

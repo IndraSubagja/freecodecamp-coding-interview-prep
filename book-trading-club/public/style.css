@@ -1,0 +1,454 @@
+:root {
+  --primary: rgb(28, 44, 114);
+  --primary-light: rgb(144, 164, 255);
+  --secondary: rgb(255, 190, 13);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: rgb(50, 50, 50);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+a,
+p,
+button {
+  font-size: 1.4rem;
+}
+
+h1 {
+  font-size: 3.6rem;
+  text-align: center;
+}
+h2,
+h2 > * {
+  font-size: 2rem;
+}
+label,
+h3,
+h3 > * {
+  font-size: 1.6rem;
+}
+
+ul {
+  list-style: none;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 5rem;
+  padding: 0 2rem;
+  background-color: var(--primary);
+}
+nav > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5rem;
+}
+nav > ul > li {
+  line-height: 5rem;
+}
+nav a {
+  font-size: 2rem;
+  vertical-align: middle;
+}
+nav button {
+  background-color: transparent;
+  font-size: 2rem;
+  vertical-align: middle;
+}
+nav .badge {
+  background: #ff0000;
+  padding: 0.2rem 0.6rem;
+  font-size: 1.2rem;
+  border-radius: 50%;
+}
+nav button:hover {
+  text-decoration: underline;
+}
+nav > ul {
+  column-gap: 2rem;
+}
+nav > a:first-child {
+  font-size: 2.4rem;
+  margin-right: auto;
+  font-weight: 600;
+}
+nav > a:first-child:hover {
+  text-decoration: none;
+}
+nav > .user,
+nav > ul > li > .requests {
+  position: relative;
+}
+nav > ul > li > .requests > .badge {
+  position: absolute;
+  top: 0;
+  right: -1rem;
+  line-height: normal;
+}
+nav > .user:hover > .dropdown.dropdown-user,
+nav > ul > li > .requests:hover > .dropdown.dropdown-requests {
+  visibility: visible;
+}
+nav > .user > .dropdown,
+nav > ul > li > .requests > .dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: max-content;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  line-height: normal;
+  overflow: hidden;
+  visibility: hidden;
+}
+nav > .user > .dropdown > a,
+nav > ul > li > .requests > .dropdown > a {
+  color: #000;
+  text-transform: capitalize;
+  display: block;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.6rem;
+}
+nav > ul > li > .requests > .dropdown > a > .badge {
+  margin-left: 1rem;
+}
+nav > .user > .dropdown > a:hover,
+nav > ul > li > .requests > .dropdown > a:hover {
+  background-color: var(--primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+form {
+  width: 100%;
+  max-width: 420px;
+  margin: 2rem auto;
+  background-color: var(--primary);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+form > * + * {
+  margin-top: 1rem;
+}
+form > h1 {
+  font-size: 3.2rem;
+}
+form > .input-control > label {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+form > .input-control > input {
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  color: #000;
+  font-size: 1.4rem;
+}
+form > button.btn {
+  display: block;
+  margin: 2rem auto 0;
+  width: 100%;
+  max-width: 420px;
+}
+form > p,
+form > p > a {
+  font-size: 1.2rem;
+}
+
+.container {
+  max-width: 1000px;
+  background-color: rgb(97, 122, 235);
+  border-radius: 1rem;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+.container > * + * {
+  margin-top: 1rem;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--secondary);
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 2px #000;
+}
+.btn:hover {
+  text-decoration: none;
+}
+.btn.btn-danger {
+  background-color: #ff0000;
+}
+
+.book-list > label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 2rem;
+  padding: 1.6rem 2rem;
+  background-color: var(--primary-light);
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 4px #000;
+  transform: translate(0, 0);
+}
+.book-list > label:hover {
+  transform: translate(1px, 1px);
+}
+.book-list > label + label {
+  margin-top: 0.5rem;
+}
+.book-list > label > div {
+  flex: 1;
+}
+.book-list > label > div > * + * {
+  margin-top: 0.6rem;
+}
+.book-list > label > div > p {
+  text-indent: 1rem;
+}
+.book-list > label > div > small {
+  display: block;
+  font-size: 1.2rem;
+}
+.book-list > label > div > small > a {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+.book-list > label > div.request-info {
+  position: absolute;
+  top: 10%;
+  right: 2%;
+}
+.book-list > label > div.request-info > * {
+  text-align: right;
+}
+.book-list > label > div.request-info a {
+  color: var(--primary);
+}
+.book-list > label > .close {
+  align-self: flex-end;
+}
+.book-list > p {
+  text-align: center;
+  font-size: 2rem;
+}
+.book-list + a.btn {
+  display: block;
+  margin: 2rem auto 0;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.close {
+  background-color: #ff0000;
+  line-height: 1;
+  border: 1px solid #000;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.notification {
+  padding: 1.2rem 1.6rem;
+  font-size: 2rem;
+  display: none;
+}
+.notification.success {
+  display: block;
+  background-color: rgb(181, 255, 191);
+  color: rgb(0, 165, 22);
+}
+.notification.danger {
+  display: block;
+  background-color: rgb(255, 181, 181);
+  color: rgb(165, 0, 0);
+}
+
+.request-form {
+  max-width: 1000px;
+}
+.request-form > .form-group {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  column-gap: 4rem;
+}
+.request-form > .form-group > div {
+  flex: 1;
+}
+.request-form > .form-group > div > * + * {
+  margin-top: 1rem;
+}
+.request-form > .form-group > div > h2 > a {
+  color: rgb(176, 191, 255);
+}
+
+.flex-books > * {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 2rem;
+  background-color: var(--primary-light);
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 4px #000;
+  padding: 2.4rem 1.6rem 1.2rem;
+}
+.flex-books > * + *,
+.flex-books > * > div:not([class]) > * + * {
+  margin-top: 0.5rem;
+}
+.flex-books > * > div:not([class]) {
+  flex: 1;
+}
+.flex-books > * > div:not([class]) > h3 > a {
+  color: var(--primary);
+}
+.flex-books > * > div:not([class]) > p {
+  text-indent: 1rem;
+}
+.flex-books > * > div.badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  text-align: right;
+}
+
+.badge > a {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-right: 0.5rem;
+}
+.badge > span {
+  background: var(--primary);
+  padding: 0.2rem 0.6rem;
+  font-size: 1.2rem;
+  border-radius: 50%;
+}
+
+.flex-list > .flex-list-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  column-gap: 2rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: var(--primary);
+}
+.flex-list > .flex-list-item + .flex-list-item {
+  margin-top: 1rem;
+}
+.flex-list > .flex-list-item > .close,
+.flex-list > .flex-list-item > .incoming {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.flex-list > .flex-list-item > .incoming {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 1rem;
+}
+.flex-list > .flex-list-item > .incoming > * {
+  margin-top: 0;
+}
+.flex-list > .flex-list-item > div {
+  flex: 1;
+}
+.flex-list > .flex-list-item > div > * + * {
+  margin-top: 0.8rem;
+}
+.flex-list > .flex-list-item > div > h2 > a {
+  color: rgb(176, 191, 255);
+}
+.flex-list > p {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.profile * {
+  font-size: 2.4rem;
+}
+.profile > p + p {
+  margin-top: 1rem;
+}
+.profile > p > strong {
+  display: inline-block;
+  width: 16rem;
+  text-transform: capitalize;
+}
+
+.user-list > li {
+  position: relative;
+  padding: 1.6rem 2rem;
+  background-color: var(--primary-light);
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 4px #000;
+  transform: translate(0, 0);
+}
+.user-list > li + li {
+  margin-top: 0.5rem;
+}
+.user-list > li > h2 > a {
+  color: var(--primary);
+}
+.user-list > li > * + * {
+  margin-top: 0.6rem;
+}
+.user-list > li > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 1rem;
+}
+.user-list > li > div > span {
+  font-size: 1.2rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.5rem;
+}
+.user-list > li > div > span:first-child {
+  background-color: rgb(255, 153, 0);
+}
+.user-list > li > div > span:last-child:not(:only-child) {
+  background-color: rgb(22, 192, 0);
+}

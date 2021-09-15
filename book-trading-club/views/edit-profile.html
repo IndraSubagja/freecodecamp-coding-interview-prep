@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Edit Profile - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <form class="user-form">
+      <h1></h1>
+
+      <div class="input-control">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter username" required />
+      </div>
+      <div class="input-control">
+        <label for="fullName">Full Name</label>
+        <input type="text" name="fullName" id="fullName" placeholder="Enter your name" required />
+      </div>
+      <div class="input-control">
+        <label for="city">City</label>
+        <input type="text" name="city" id="city" placeholder="Enter your city" />
+      </div>
+      <div class="input-control">
+        <label for="state">State</label>
+        <input type="text" name="state" id="state" placeholder="Enter your state" />
+      </div>
+      <div class="input-control">
+        <label for="address">Address</label>
+        <input type="text" name="address" id="address" placeholder="Enter your address" />
+      </div>
+
+      <button type="submit" class="btn">Save Changes</button>
+    </form>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        const submitHandler = async (event) => {
+          event.preventDefault();
+
+          const data = await fetch('/api/user', {
+            method: 'PUT',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: username.value,
+              fullName: fullName.value,
+              city: city.value,
+              state: state.value,
+              address: address.value,
+              userId: user._id,
+            }),
+          }).then((res) => res.json());
+
+          if (data.success) {
+            document.location.href = `/profile?redirect=new`;
+          } else {
+            showNotification(data);
+          }
+        };
+
+        const userForm = document.querySelector('.user-form');
+        const formTitle = document.querySelector('.user-form > h1');
+        const formInputs = document.querySelectorAll('.user-form > .input-control > input');
+
+        userForm.addEventListener('submit', submitHandler);
+        formTitle.innerText = `Update Profile for ${user?.username}`;
+
+        formInputs.forEach((input) => {
+          input.value = user[input.id];
+        });
+      });
+    </script>
+  </body>
+</html>

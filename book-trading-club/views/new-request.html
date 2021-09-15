@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>New Request - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <form class="request-form">
+      <h1>Create Request for Trade</h1>
+
+      <div class="form-group">
+        <div>
+          <h2></h2>
+          <ul class="flex-books books-give"></ul>
+          <a href="/books/select/give" class="btn">Edit Books to Give</a>
+        </div>
+        <div>
+          <h2>and wants to take:</h2>
+          <ul class="flex-books books-take"></ul>
+          <a href="/books/select/take" class="btn">Edit Books to Take</a>
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Submit Request</button>
+    </form>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        const booksGive = document.querySelector('.books-give');
+        const booksTake = document.querySelector('.books-take');
+
+        const takeBooks = [...request.filter((book) => book.type === 'take')];
+        const giveBooks = [...request.filter((book) => book.type === 'give')];
+
+        const submitHandler = async (event) => {
+          event.preventDefault();
+
+          if (!takeBooks.length || !giveBooks.length)
+            return showNotification({
+              success: false,
+              message: 'Request must include at least one book to give and one book to take',
+            });
+
+          const data = await fetch('/api/request', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ takeBooks, giveBooks, userId: user?._id }),
+          }).then((res) => res.json());
+
+          if (data.success) {
+            localStorage.removeItem('request');
+            document.location.href = `/requests?redirect=new`;
+          } else {
+            showNotification(data);
+          }
+        };
+
+        const requestForm = document.querySelector('.request-form');
+        const giveTitle = document.querySelector('.form-group > div:first-child > h2');
+
+        requestForm.addEventListener('submit', submitHandler);
+        giveTitle.innerHTML = `<a href="/users/${user._id}">${user.username}</a> wants to give:`;
+
+        giveBooks.map((book) => addBookRequest(booksGive, book, false));
+        takeBooks.map((book) => addBookRequest(booksTake, book, true));
+      });
+    </script>
+  </body>
+</html>

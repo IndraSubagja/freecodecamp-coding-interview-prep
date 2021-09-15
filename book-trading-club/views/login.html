@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Login - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+    </nav>
+
+    <div class="notification"></div>
+
+    <form class="login-form">
+      <h1>Login to Your Account</h1>
+
+      <div class="input-control">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter username" required />
+      </div>
+      <div class="input-control">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter password" required />
+      </div>
+
+      <button type="submit" class="btn">Login</button>
+
+      <p>New member? <a href="/register">Create account</a></p>
+    </form>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        const submitHandler = async (event) => {
+          event.preventDefault();
+
+          const data = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username.value, password: password.value }),
+          }).then((res) => res.json());
+
+          if (data.success) {
+            localStorage.setItem('userId', data.userId);
+            document.location.href = '/books';
+          } else {
+            event.target.reset();
+            showNotification(data);
+          }
+        };
+
+        const loginForm = document.querySelector('.login-form');
+        loginForm.addEventListener('submit', submitHandler);
+      });
+    </script>
+  </body>
+</html>

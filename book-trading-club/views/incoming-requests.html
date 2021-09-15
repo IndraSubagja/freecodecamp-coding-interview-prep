@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Incoming Requests - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <div class="container">
+      <h1>Incoming Requests</h1>
+
+      <div class="flex-end">
+        <a href="/requests/new" class="btn">New Request</a>
+      </div>
+
+      <ul class="flex-list request-list"></ul>
+    </div>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        const requestList = document.querySelector('.request-list');
+
+        const getRequests = async () => {
+          const data = await fetch(`/api/request?mode=incoming&userId=${user._id}`).then((res) => res.json());
+
+          if (!data.requests.length) {
+            const p = document.createElement('p');
+            p.innerText = 'There are no incoming requests currently';
+
+            return requestList.appendChild(p);
+          }
+
+          data.requests.map((request) => {
+            const li = document.createElement('li');
+            li.classList.add('request', 'flex-list-item');
+            li.innerHTML = `
+            <div>
+              <h2></h2>
+              <ul class="flex-books books-give"></ul>
+            </div>
+            <div>
+              <h2>and wants to take:</h2>
+              <ul class="flex-books books-take"></ul>
+            </div>`;
+
+            li.firstElementChild.firstElementChild.innerHTML = `<a href="/users/${request.user._id}">${request.user.username}</a> wants to give:`;
+
+            request.giveBooks.map((book) => addBookRequest(li.firstElementChild.lastElementChild, book, false, true));
+            request.takeBooks.map((book) => addBookRequest(li.lastElementChild.lastElementChild, book, true, true));
+
+            const div = document.createElement('div');
+            const selectButton = document.createElement('a');
+            const rejectButton = document.createElement('button');
+
+            div.classList.add('incoming');
+            selectButton.classList.add('btn');
+            rejectButton.classList.add('btn', 'btn-danger');
+
+            selectButton.innerText = 'Select';
+            rejectButton.innerText = 'Reject';
+
+            selectButton.setAttribute('href', `/requests/select/${request._id}`);
+
+            rejectButton.addEventListener('click', async (event) => {
+              const data = await fetch('/api/request', {
+                method: 'DELETE',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ requestId: request._id, userId: request.user._id }),
+              }).then((res) => res.json());
+
+              if (event.target.parentElement.parentElement.parentElement.childNodes.length === 1) {
+                const p = document.createElement('p');
+                p.innerText = 'There are no requests currently';
+
+                requestList.appendChild(p);
+              }
+
+              event.target.parentElement.parentElement.remove();
+              showNotification(data.success ? { success: true, message: 'Request rejected successfully' } : data);
+            });
+
+            div.appendChild(selectButton);
+            div.appendChild(rejectButton);
+
+            li.appendChild(div);
+
+            requestList.appendChild(li);
+          });
+        };
+
+        getRequests();
+      });
+    </script>
+  </body>
+</html>

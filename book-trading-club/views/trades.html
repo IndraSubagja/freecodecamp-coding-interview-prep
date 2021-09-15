@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Trades - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <div class="container">
+      <h1>All Trades</h1>
+
+      <ul class="flex-list trade-list"></ul>
+    </div>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        const query = document.location.search.slice(1);
+        if (query.split('=')[0] === 'redirect' && query.split('=')[1] === 'new') {
+          showNotification({ success: true, message: 'Trade successful' });
+          window.history.replaceState({}, document.title, '/trades');
+        }
+
+        const tradeList = document.querySelector('.trade-list');
+
+        const getTrades = async () => {
+          const data = await fetch('/api/trade').then((res) => res.json());
+
+          if (!data.trades.length) {
+            const p = document.createElement('p');
+            p.innerText = 'There are no trades currently';
+
+            return tradeList.appendChild(p);
+          }
+
+          data.trades.map((trade) => {
+            const li = document.createElement('li');
+            li.classList.add('trade', 'flex-list-item');
+            li.innerHTML = `
+            <div>
+              <h2></h2>
+              <ul class="flex-books books-give"></ul>
+            </div>
+            <div>
+              <h2></h2>
+              <ul class="flex-books books-take"></ul>
+            </div>`;
+
+            li.firstElementChild.firstElementChild.innerHTML = `<a href="/users/${trade.giveBooks[0].user._id}">${trade.giveBooks[0].user.username}</a> gets:`;
+            li.lastElementChild.firstElementChild.innerHTML = `<a href="/users/${trade.takeBooks[0].user._id}">${trade.takeBooks[0].user.username}</a> gets:`;
+
+            trade.giveBooks.map((book) => addBookRequest(li.firstElementChild.lastElementChild, book, false, false));
+            trade.takeBooks.map((book) => addBookRequest(li.lastElementChild.lastElementChild, book, false, false));
+
+            tradeList.appendChild(li);
+          });
+        };
+
+        getTrades();
+      });
+    </script>
+  </body>
+</html>

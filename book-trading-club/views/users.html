@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Users - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="container">
+      <h1>All Users</h1>
+
+      <ul class="user-list"></ul>
+    </div>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(() => {
+        const userList = document.querySelector('.user-list');
+
+        const getUsers = async () => {
+          const data = await fetch('/api/user').then((res) => res.json());
+
+          if (!data.users.length) {
+            const p = document.createElement('p');
+            p.innerText = 'There are no users currently';
+
+            return userList.appendChild(p);
+          }
+
+          data.users.map((user) => {
+            const li = document.createElement('li');
+            const userAddress =
+              user.city && user.state ? `${user.city}, ${user.state}` : user.city || user.state || 'Somewhere amazing';
+
+            li.classList.add('user');
+            li.innerHTML = `
+              <h2><a href="/users/${user._id}">${user.username}</a></h2>
+              <p>from ${userAddress}</p>
+              ${
+                user.books.length || user.requests.length
+                  ? `<div>
+                ${user.books.length ? `<span>Books: ${user.books.length}</span>` : ''}
+                ${
+                  user.incomingRequests.length ? `<span>Incoming Requests: ${user.incomingRequests.length}</span>` : ''
+                }`
+                  : ''
+              }
+            </div>`;
+
+            userList.appendChild(li);
+          });
+        };
+
+        getUsers();
+      });
+    </script>
+  </body>
+</html>

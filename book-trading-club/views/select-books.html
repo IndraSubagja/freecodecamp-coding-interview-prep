@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Select Books - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <form class="request-form">
+      <h1>Select Books to Trade</h1>
+
+      <div class="form-group">
+        <div>
+          <h2></h2>
+          <ul class="flex-books books-give"></ul>
+        </div>
+        <div>
+          <h2>and wants to take:</h2>
+          <ul class="flex-books books-take"></ul>
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Accept Trade</button>
+    </form>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(async () => {
+        const booksGive = document.querySelector('.books-give');
+        const booksTake = document.querySelector('.books-take');
+        const requestId = document.location.href.split('/').slice(-1)[0];
+
+        localStorage.setItem('trade', JSON.stringify([]));
+
+        const data = await fetch(`/api/request?requestId=${requestId}`).then((res) => res.json());
+
+        const submitHandler = async (event) => {
+          event.preventDefault();
+
+          const trade = JSON.parse(localStorage.getItem('trade'));
+          const takeBooks = [...trade.filter((book) => book.type === 'take')];
+          const giveBooks = [...trade.filter((book) => book.type === 'give')];
+
+          if (!takeBooks.length || !giveBooks.length)
+            return showNotification({
+              success: false,
+              message: 'Request must include at least one book to give and one book to take',
+            });
+
+          if (takeBooks.length !== giveBooks.length)
+            return showNotification({
+              success: false,
+              message: 'The number of books given must equal the number taken',
+            });
+
+          const data = await fetch('/api/trade', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ takeBooks, giveBooks, requestId }),
+          }).then((res) => res.json());
+
+          if (data.success) {
+            localStorage.removeItem('trade');
+            document.location.href = `/trades?redirect=new`;
+          } else {
+            showNotification(data);
+          }
+        };
+
+        const requestForm = document.querySelector('.request-form');
+        const giveTitle = document.querySelector('.form-group > div:first-child > h2');
+
+        requestForm.addEventListener('submit', submitHandler);
+        giveTitle.innerHTML = `<a href="/users/${data.request.user._id}">${data.request.user.username}</a> wants to give:`;
+
+        data.request.giveBooks.map((book) => addBookRequest(booksGive, book, true, true, true));
+        data.request.takeBooks.map((book) => addBookRequest(booksTake, book, false, true, true));
+
+        document.body.addEventListener('unload', () => localStorage.removeItem('trade'));
+      });
+    </script>
+  </body>
+</html>

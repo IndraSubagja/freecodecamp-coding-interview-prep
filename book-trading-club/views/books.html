@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <div class="container">
+      <h1>Books Available for Trade</h1>
+
+      <div class="flex-end">
+        <a href="/my-books" class="btn">Add Book</a>
+        <a href="/requests/new" class="btn">New Request</a>
+      </div>
+
+      <div class="book-list"></div>
+    </div>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(async () => {
+        const currentUserId = document.location.href.split('/').slice(-1)[0];
+
+        if (currentUserId !== user?._id && currentUserId !== 'books') {
+          const data = await fetch(`/api/user?userId=${currentUserId}`).then((res) => res.json());
+          const title = document.querySelector('.container > h1');
+
+          title.innerText = `${data.user.username}'s Books`;
+          getBooks(`${data.user.username} currently has no books`, currentUserId);
+        } else {
+          getBooks('There are currently no books to exchange');
+        }
+      });
+    </script>
+  </body>
+</html>

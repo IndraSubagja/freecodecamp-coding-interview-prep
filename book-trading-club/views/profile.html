@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Profile - Book Trading Club</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/books">Book Trading Club</a>
+
+      <ul>
+        <li><a href="/books">Books</a></li>
+        <li><a href="/requests">Requests</a></li>
+        <li><a href="/trades">Trades</a></li>
+        <li><a href="/users">Users</a></li>
+      </ul>
+
+      <div class="user"><a href="/login" class="user">Login</a></div>
+    </nav>
+
+    <div class="notification"></div>
+
+    <div class="container">
+      <h1></h1>
+      <div class="flex-end"></div>
+      <div class="profile"></div>
+    </div>
+
+    <script src="/public/app.js"></script>
+    <script>
+      loadHandler(async () => {
+        const query = document.location.search.slice(1);
+        if (query.split('=')[0] === 'redirect' && query.split('=')[1] === 'new') {
+          showNotification({ success: true, message: 'Profile updated successfully' });
+          window.history.replaceState({}, document.title, '/profile');
+        }
+
+        const currentUserId = document.location.href.split('/').slice(-1)[0];
+        const profileTitle = document.querySelector('.container > h1');
+        const link = document.querySelector('.flex-end');
+        const profile = document.querySelector('.profile');
+        let userProfile;
+
+        if (currentUserId !== user?._id && currentUserId !== 'profile') {
+          const data = await fetch(`/api/user?userId=${currentUserId}`).then((res) => res.json());
+          const booksLink = document.createElement('a');
+
+          booksLink.setAttribute('href', `/books/${currentUserId}`);
+          booksLink.innerText = `${data.user.username}'s Books`;
+          booksLink.className = 'btn';
+
+          link.appendChild(booksLink);
+          userProfile = data.user;
+        } else if (currentUserId === 'profile' || currentUserId === user?._id) {
+          const booksLink = document.createElement('a');
+          const editLink = document.createElement('a');
+
+          booksLink.setAttribute('href', '/my-books');
+          booksLink.innerText = `${user.username}'s Books`;
+          booksLink.className = 'btn';
+          editLink.setAttribute('href', 'edit-profile');
+          editLink.innerText = 'Edit Profile';
+          editLink.className = 'btn';
+
+          link.appendChild(booksLink);
+          link.appendChild(editLink);
+          userProfile = user;
+        }
+
+        profileTitle.innerText = `${userProfile.username}'s Profile`;
+
+        Object.entries(userProfile)
+          .filter((entry) => ['username', 'fullName', 'city', 'state', 'address'].includes(entry[0]))
+          .map(
+            (entry) =>
+              (profile.innerHTML =
+                profile.innerHTML + `<p><strong>${entry[0].replace(/([A-Z])/, ' $1')}</strong>: ${entry[1]}</p>`)
+          );
+      });
+    </script>
+  </body>
+</html>
