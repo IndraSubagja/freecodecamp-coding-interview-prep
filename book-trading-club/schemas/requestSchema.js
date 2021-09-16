@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const requestSchema = mongoose.Schema({
+const requestSchema = new mongoose.Schema({
   takeBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   giveBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
