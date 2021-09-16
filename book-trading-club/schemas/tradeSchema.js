@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const tradeSchema = mongoose.Schema({
+const tradeSchema = new mongoose.Schema({
   takeBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   giveBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
 });
