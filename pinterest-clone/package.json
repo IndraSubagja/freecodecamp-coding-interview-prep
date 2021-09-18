@@ -1,0 +1,24 @@
+{
+  "name": "pinterest-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "client": "cd app && npm start",
+    "all": "npm-run-all --parallel dev client"
+  },
+  "author": "Indra Subagja",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.6"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
