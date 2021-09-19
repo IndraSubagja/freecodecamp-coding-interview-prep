@@ -178,7 +178,7 @@ function App() {
             className="github-btn"
             onClick={async () => {
               const { data } = await axios.get('/client-id');
-              const redirectUri = 'http://localhost:8000/login';
+              const redirectUri = 'https://pinterest-clone.indrasubagja.repl.co/login';
 
               document.location.href = `https://github.com/login/oauth/authorize?client_id=${data.CLIENT_ID}&redirect_uri=${redirectUri}`;
             }}
