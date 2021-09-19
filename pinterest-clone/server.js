@@ -88,7 +88,7 @@ app.get('/user', async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  res.clearCookie('token', { domain: 'https://pinterest-clone.indrasubagja.repl.co', path: '/' });
+  res.clearCookie('token');
   res.json({ message: 'Logout successfully' });
 });
 
