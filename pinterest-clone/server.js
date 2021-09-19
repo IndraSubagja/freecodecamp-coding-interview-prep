@@ -11,7 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(cookieParser());
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -46,7 +48,7 @@ app.get('/login', async (req, res) => {
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
         code,
-        redirect_uri: 'http://localhost:8000',
+        redirect_uri: 'https://pinterest-clone.indrasubagja.repl.co',
       },
       {
         headers: {
@@ -61,7 +63,7 @@ app.get('/login', async (req, res) => {
       sameSite: true,
     });
 
-    res.redirect('http://localhost:8000');
+    res.redirect('https://pinterest-clone.indrasubagja.repl.co');
   } catch (error) {
     res.status(400).send('An error occured');
   }
@@ -86,7 +88,7 @@ app.get('/user', async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  res.clearCookie('token', { domain: 'localhost', path: '/' });
+  res.clearCookie('token', { domain: 'https://pinterest-clone.indrasubagja.repl.co', path: '/' });
   res.json({ message: 'Logout successfully' });
 });
 
