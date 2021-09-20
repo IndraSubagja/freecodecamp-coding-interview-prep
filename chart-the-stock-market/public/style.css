@@ -1,0 +1,7 @@
+body {
+  text-align: center;
+}
+
+.stocks > button + button {
+  margin-left: 0.5rem;
+}
