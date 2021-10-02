@@ -130,7 +130,7 @@ function App() {
     const {
       data: { clientId },
     } = await axios.get('/api/client-id');
-    const redirectUri = 'http://localhost:8000/api/login';
+    const redirectUri = 'https://nightlife-coordination-app.indrasubagja.repl.co/api/login';
 
     document.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
   };
